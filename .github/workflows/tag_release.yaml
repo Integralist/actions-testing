@@ -1,0 +1,12 @@
+name: Tag Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  print_tag:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Print Tag"
+      run: echo ${{ github.ref_name }}
