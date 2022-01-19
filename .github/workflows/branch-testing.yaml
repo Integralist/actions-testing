@@ -1,0 +1,25 @@
+name: Testing GitHub Actions
+on:
+  push:
+    branches:
+      - "integralist/test-commit-status-action"
+
+jobs:
+  commit-status-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: output_test
+        run: echo "::set-output name=filename::README.md"
+      - uses: myrotvorets/set-commit-status-action@master
+        name: Pending
+        with:
+          sha: ${{ github.sha }}
+          status: pending
+          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles(steps.output_test.outputs.filename) }}
+      - uses: myrotvorets/set-commit-status-action@master
+        name: Success
+        with:
+          sha: ${{ github.sha }}
+          status: success
+          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles(steps.output_test.outputs.filename) }}
