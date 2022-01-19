@@ -1,0 +1,22 @@
+name: Testing GitHub Actions
+on:
+  push:
+    branches:
+      - "integralist/test-commit-status-action"
+
+jobs:
+  commit-status-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: myrotvorets/set-commit-status-action@master
+        name: Pending
+        with:
+          sha: ${{ github.sha }}
+          status: pending
+          context: ${{ inputs.description }}
+      - uses: myrotvorets/set-commit-status-action@master
+        name: Success
+        with:
+          sha: ${{ github.sha }}
+          status: success
+          context: ${{ inputs.description }}
