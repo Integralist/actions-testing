@@ -13,10 +13,10 @@ jobs:
         with:
           sha: ${{ github.sha }}
           status: pending
-          context: Pending context
+          context: Unique
       - uses: myrotvorets/set-commit-status-action@master
         name: Success
         with:
           sha: ${{ github.sha }}
           status: success
-          context: Success context
+          context: Unique
