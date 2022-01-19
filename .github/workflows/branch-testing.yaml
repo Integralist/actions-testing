@@ -16,10 +16,10 @@ jobs:
         with:
           sha: ${{ github.sha }}
           status: pending
-          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles('${{ steps.output_test.outputs.filename }}') }}
+          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles(steps.output_test.outputs.filename) }}
       - uses: myrotvorets/set-commit-status-action@master
         name: Success
         with:
           sha: ${{ github.sha }}
           status: success
-          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles('${{ steps.output_test.outputs.filename }}') }}
+          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles(steps.output_test.outputs.filename) }}
