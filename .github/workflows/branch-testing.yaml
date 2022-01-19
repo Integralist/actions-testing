@@ -8,15 +8,16 @@ jobs:
   commit-status-testing:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: myrotvorets/set-commit-status-action@master
         name: Pending
         with:
           sha: ${{ github.sha }}
           status: pending
-          context: Unique
+          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles('README.md') }}
       - uses: myrotvorets/set-commit-status-action@master
         name: Success
         with:
           sha: ${{ github.sha }}
           status: success
-          context: Unique
+          context: used-as-key-to-identify-item-to-update-${{ runner.os }}-${{ hashFiles('README.md') }}
