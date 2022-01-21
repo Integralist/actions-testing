@@ -1,0 +1,20 @@
+name: Testing Dockerfile Build
+on: [push]
+
+jobs:
+  # NOTE: Doesn't work at all. You have to use an image published somewhere it seems.
+  #
+  # do-a-dockerfile-build:
+  #   strategy:
+  #     matrix:
+  #       platform: [ubuntu-latest, macos-latest, windows-latest]
+  #   runs-on: ${{ matrix.platform }}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: docker-practice/actions-setup-docker@master
+  #     - run: docker version
+  #     - run: ls -la
+  #     - run: docker build -t fastly/cli/node . -f ./Dockerfile-node
+  #     - run: docker run -v $PWD:/app -it -p 7676:7676 fastly/cli/node compute init --from https://github.com/fastly/compute-starter-kit-javascript-default --name testing-cli --description testing --author integralist --force
+  #     - run: if [[ "${{ matrix.platform }}" == "windows-latest" ]]; then echo dirs; else echo ls -la; fi
+  #     - run: ls
