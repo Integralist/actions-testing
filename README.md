@@ -14,6 +14,24 @@ on:
 
 > **NOTE**: We don't specify a value for `push` key which means run whenever a push is triggered on any branch.
 
+## Automatically cancel in-flight workflows
+
+The `concurrency` setting allows you to restrict a workflow to one 'group' at a time. 
+
+Now if you're working on a PR which executes a workflow, then the workflow is likely getting run on every single push to the PR. 
+
+An example of why this is a problem is if you have just pushed a _broken_ commit and now you're pushing a new commit on top to fix it, then the workflow from the previous commit (the broken one) is still going to run, it's still going to use up resources but ultimately it's going to fail.
+
+What you want to have happen is when the second commit is pushed, it cancels running the workflow on the previous commit which we know to be broken any way. Hell, it's nice to have this behaviour if you're pushing commits at just a regular pace! Why have a bunch of in-flight workflows runnings on old code.
+
+To get this to work you set both the `concurrency` group _and_ `cancel-in-progress`:
+
+```
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+```
+
 ## Persisting Data
 
 GitHub says you can use 'caching' or 'artifacts' to persist data between jobs. But you can also persist data by using the JSON output of one job as the `strategy.matrix` input for another job:
