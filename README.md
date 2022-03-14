@@ -26,7 +26,7 @@ What you want to have happen is when the second commit is pushed, it cancels run
 
 To get this to work you set both the `concurrency` group _and_ `cancel-in-progress`:
 
-```
+```yaml
 concurrency:
   group: ${{ github.ref_name }}
   cancel-in-progress: true
