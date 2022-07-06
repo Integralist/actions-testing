@@ -33,6 +33,7 @@ jobs:
           echo $GLOBAL
       - name: Print Job Env Vars
         run: |
+          echo "$LITERAL"
           echo $LITERAL
           echo $INTERPOLATION
           echo $GENERATED
