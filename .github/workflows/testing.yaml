@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: ./bar.sh # we expect the job to complete fine, even if the script called itself sources another script
     outputs:
-      some_output: abc
+      some_output: I come from the first job
 
   testing-github-actions:
     needs: testing-script-sourcing
@@ -103,8 +103,8 @@ jobs:
       FOO: ${{ matrix.FOO }}
       BAR: ${{ matrix.BAR }}
     steps:
-      # validate that we can depend on data safely from another job even if we don't explicitly set it in the above `needs:` field.
-      # this is because the job we do set in `needs:` itself depends on the `testing-script-sourcing` job, so we know its output data should be available.
+      # whenever we use `needs.<job>.outputs.<id>` we must add the job to the above `needs` field.
+      # otherwise we'll have no data in the `needs` reference below...
       - run: echo ${{ needs.testing-script-sourcing.outputs.some_output }}
       # Another way to persist data across jobs is to use the strategy.matrix
       # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix
