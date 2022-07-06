@@ -92,7 +92,9 @@ jobs:
 
   testing-shared-data:
     runs-on: ubuntu-latest
-    needs: testing-github-actions
+    needs:
+      - testing-github-actions
+      - testing-script-sourcing
     if: ${{ github.ref_name == 'main' }}
     strategy:
       matrix: ${{ fromJSON(needs.testing-github-actions.outputs.matrix) }}
