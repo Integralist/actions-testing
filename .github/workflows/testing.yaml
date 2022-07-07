@@ -31,6 +31,8 @@ jobs:
         run: |
           echo ${{ env.GLOBAL }}
           echo $GLOBAL
+      - name: Something that doesn't exist in the env context
+        run: echo ${{ env.NONSENSE }}
       - name: Print Job Env Vars
         run: |
           echo "$LITERAL"
