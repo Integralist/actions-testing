@@ -46,15 +46,24 @@ jobs:
           tinygo version
       - if: ${{ matrix.platform == 'macos-latest' }}
         run: |
-          wget https://github.com/tinygo-org/tinygo/releases/download/v${{ matrix.tinygo-version }}/tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
-          tar -xvf tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
-          tinygo/bin/tinygo version
-          echo "${{ github.workspace }}"
-          echo "${{ env.PATH }}"
-          echo "${{ github.workspace }}/tinygo/bin" >> $GITHUB_PATH
-      - if: ${{ matrix.platform == 'macos-latest' }}
+          brew tap tinygo-org/tools
+          brew install tinygo
+          tinygo version
+          # wget https://github.com/tinygo-org/tinygo/releases/download/v${{ matrix.tinygo-version }}/tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
+          # tar -xvf tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
+          # tinygo/bin/tinygo version
+          # echo "${{ github.workspace }}"
+          # echo "${{ env.PATH }}"
+          # echo "${{ github.workspace }}/tinygo/bin" >> $GITHUB_PATH
+      # - if: ${{ matrix.platform == 'macos-latest' }}
+      #   run: |
+      #     echo "${{ env.PATH }}"
+      #     tinygo version
+      - if: ${{ matrix.platform == 'windows-latest' }}
         run: |
-          echo "${{ env.PATH }}"
+          iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+          scoop install go
+          scoop install tinygo
           tinygo version
       # - if: ${{ matrix.platform == 'windows-latest' }}
       #   uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
