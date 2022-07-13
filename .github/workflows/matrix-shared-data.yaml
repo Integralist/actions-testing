@@ -19,6 +19,7 @@ jobs:
   job3:
     strategy:
       matrix:
+        tinygo-version: [0.24.0]
         platform: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -37,6 +38,12 @@ jobs:
         run: echo "3. we're running on ${{ matrix.platform }} with env TEST_RUN set to ${{ env.TEST_RUN }}"
         env:
           TEST_RUN: ${{ steps.set_env.outputs.run_tests }}
+      - if: ${{ matrix.platform == 'ubuntu-latest' }}
+        run: |
+          wget https://github.com/tinygo-org/tinygo/releases/download/v${{ matrix.tinygo-version }}/tinygo_${{ matrix.tinygo-version }}_amd64.deb
+          sudo dpkg -i tinygo_${{ matrix.tinygo-version }}_amd64.deb
+          echo "/usr/local/bin" >> $GITHUB_PATH
+          tinygo version
       - if: ${{ matrix.platform == 'windows-latest' }}
         uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
       - if: ${{ matrix.platform == 'windows-latest' }}
