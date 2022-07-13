@@ -111,6 +111,10 @@ jobs:
       - run: echo ${{ needs.testing-script-sourcing.outputs.some_output }}
       # Another way to persist data across jobs is to use the strategy.matrix
       # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix
+      - if: ${{ matrix.FOO == 'abc' }}
+        run: echo "I was run because matrix.FOO == 'abc'"
+      - if: ${{ matrix.FOO != 'xyz' }}
+        run: echo "I was run because matrix.FOO != 'xyz'"
       - run: echo ${{ matrix.FOO }}
       - run: echo ${{ matrix.BAR }}
       - run: echo https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
