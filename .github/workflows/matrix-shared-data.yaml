@@ -65,6 +65,21 @@ jobs:
           scoop install go
           scoop install tinygo
           tinygo version
+          $Env:Path
+          echo "~\scoop\shims" >> $GITHUB_PATH
+      - if: ${{ matrix.platform == 'windows-latest' }}
+        run: |
+          $Env:Path
+          dir ~\scoop
+          dir ~\scoop\apps
+          dir ~\scoop\shims
+          # type ~\scoop\apps\tinygo
+          # type ~\scoop\shims\tinygo.shim
+          ~\scoop\shims\go.shim
+          ~\scoop\shims\gofmt.shim
+          ~\scoop\shims\tinygo.shim
+          ~\scoop\shims\scoop
+          tinygo version
       # - if: ${{ matrix.platform == 'windows-latest' }}
       #   uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
       # - if: ${{ matrix.platform == 'windows-latest' }}
