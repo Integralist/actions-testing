@@ -29,7 +29,7 @@ jobs:
       - if: ${{ matrix.platform == 'windows-latest' }}
         run: echo "3. we're running on ${{ matrix.platform }}"
       - if: ${{ matrix.platform == 'windows-latest' }}
-        uses: MinoruSekine/setup-scoop@v1
+        uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
       - if: ${{ matrix.platform == 'windows-latest' }}
         run: scoop install go
       - if: ${{ matrix.platform == 'windows-latest' }}
