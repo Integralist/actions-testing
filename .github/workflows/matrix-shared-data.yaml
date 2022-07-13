@@ -22,12 +22,21 @@ jobs:
         platform: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.platform }}
     steps:
+      - if: ${{ matrix.platform != 'windows-latest' }}
+        id: set_env
+        run: echo ::set-output name=run_tests::true
       - if: ${{ matrix.platform == 'ubuntu-latest' }}
-        run: echo "1. we're running on ${{ matrix.platform }}"
+        run: echo "1. we're running on ${{ matrix.platform }} with env TEST_RUN set to ${{ env.TEST_RUN }}"
+        env:
+          TEST_RUN: ${{ steps.set_env.outputs.run_tests }}
       - if: ${{ matrix.platform == 'macos-latest' }}
-        run: echo "2. we're running on ${{ matrix.platform }}"
+        run: echo "2. we're running on ${{ matrix.platform }} with env TEST_RUN set to ${{ env.TEST_RUN }}"
+        env:
+          TEST_RUN: ${{ steps.set_env.outputs.run_tests }}
       - if: ${{ matrix.platform == 'windows-latest' }}
-        run: echo "3. we're running on ${{ matrix.platform }}"
+        run: echo "3. we're running on ${{ matrix.platform }} with env TEST_RUN set to ${{ env.TEST_RUN }}"
+        env:
+          TEST_RUN: ${{ steps.set_env.outputs.run_tests }}
       - if: ${{ matrix.platform == 'windows-latest' }}
         uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
       - if: ${{ matrix.platform == 'windows-latest' }}
