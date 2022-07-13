@@ -15,3 +15,16 @@ jobs:
       matrix: ${{fromJSON(needs.job1.outputs.matrix)}}
     steps:
       - run: echo ${{ matrix }}
+
+  job3:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - if: ${{ matrix.platform == 'ubuntu-latest' }}
+        run: echo "1. we're running on ${{ matrix.platform }}"
+      - if: ${{ matrix.platform == 'macos-latest' }}
+        run: echo "2. we're running on ${{ matrix.platform }}"
+      - if: ${{ matrix.platform == 'windows-latest' }}
+        run: echo "3. we're running on ${{ matrix.platform }}"
