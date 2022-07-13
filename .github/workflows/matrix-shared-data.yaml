@@ -44,11 +44,23 @@ jobs:
           sudo dpkg -i tinygo_${{ matrix.tinygo-version }}_amd64.deb
           echo "/usr/local/bin" >> $GITHUB_PATH
           tinygo version
-      - if: ${{ matrix.platform == 'windows-latest' }}
-        uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
-      - if: ${{ matrix.platform == 'windows-latest' }}
-        run: scoop install go
-      - if: ${{ matrix.platform == 'windows-latest' }}
-        run: scoop install tinygo
-      - if: ${{ matrix.platform == 'windows-latest' }}
-        run: tinygo version
+      - if: ${{ matrix.platform == 'macos-latest' }}
+        run: |
+          wget https://github.com/tinygo-org/tinygo/releases/download/v${{ matrix.tinygo-version }}/tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
+          tar -xvf tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
+          tinygo/bin/tinygo version
+          echo "${{ github.workspace }}"
+          echo "${{ env.PATH }}"
+          echo "${{ github.workspace }}/tinygo/bin" >> $GITHUB_PATH
+      - if: ${{ matrix.platform == 'macos-latest' }}
+        run: |
+          echo "${{ env.PATH }}"
+          tinygo version
+      # - if: ${{ matrix.platform == 'windows-latest' }}
+      #   uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
+      # - if: ${{ matrix.platform == 'windows-latest' }}
+      #   run: scoop install go
+      # - if: ${{ matrix.platform == 'windows-latest' }}
+      #   run: scoop install tinygo
+      # - if: ${{ matrix.platform == 'windows-latest' }}
+      #   run: tinygo version
