@@ -28,3 +28,11 @@ jobs:
         run: echo "2. we're running on ${{ matrix.platform }}"
       - if: ${{ matrix.platform == 'windows-latest' }}
         run: echo "3. we're running on ${{ matrix.platform }}"
+      - if: ${{ matrix.platform == 'windows-latest' }}
+        uses: MinoruSekine/setup-scoop@v1
+      - if: ${{ matrix.platform == 'windows-latest' }}
+        run: scoop install go
+      - if: ${{ matrix.platform == 'windows-latest' }}
+        run: scoop install tinygo
+      - if: ${{ matrix.platform == 'windows-latest' }}
+        run: tinygo version
