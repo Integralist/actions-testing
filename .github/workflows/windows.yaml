@@ -7,7 +7,6 @@ jobs:
   testing-finding-of-files:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
       - run: mkdir foo
       - run: cd foo && mkdir bar
       - run: cd
