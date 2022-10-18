@@ -1,7 +1,7 @@
 name: Testing GitHub Actions on Windows
 on: [push]
 concurrency: # cancel in progress runs on push
-  group: ${{ github.ref_name }}
+  group: "windows-test"
   cancel-in-progress: true
 jobs:
   testing-finding-of-files:
