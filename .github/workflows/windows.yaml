@@ -7,9 +7,7 @@ jobs:
   testing-finding-of-files:
     runs-on: windows-latest
     steps:
-      - run: mkdir foo
-      - run: cd foo && mkdir bar
-      - run: cd
-      - run: dir /s
-      - run: type nul > .\foo\bar\main.go
+      - run: mkdir -p foo\bar
+      - run: Get-ChildItem -Force -recurse
+      - run: ni .\foo\bar\main.go
       - run: where /r foo *.go
