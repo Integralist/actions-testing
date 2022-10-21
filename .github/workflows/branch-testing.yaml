@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: output_test
-        run: echo "::set-output name=filename::README.md"
+        run: echo "::set-output name=filename::README.md" # UPDATED SYNTAX: echo "filename=README.md" >> $GITHUB_OUTPUT
       - uses: myrotvorets/set-commit-status-action@master
         name: Pending
         with:

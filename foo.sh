@@ -10,6 +10,10 @@ echo "::error title=some title::Some error occurred"
 
 echo ::set-output name=nvmrc-version::$(cat .nvmrc)
 echo ::set-output name=something_else::msg: $msg
+#
+# UPDATED syntax:
+# echo "nvmrc-version=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+# echo "something_else='msg: $msg'" >> $GITHUB_OUTPUT
 
 returnSuccessfulExitCode() {
   return 0 # a no zero exit code would cause the following `&& echo ...` to not run
@@ -29,3 +33,7 @@ echo ::set-output name=matrix::$JSON_STRING
 # don't forget to wrap JSON in single quotes otherwise the job will try to run
 # echo {BEEP: 123, BOOP: testing} which then doesn't get parsed as JSON via jq correctly.
 echo ::set-output name=custom_json::'{"BEEP": 123, "BOOP": "testing"}'
+
+# UPDATED syntax:
+# echo "matrix=$JSON_STRING" >> $GITHUB_OUTPUT
+# echo "custom_json='{"BEEP": 123, "BOOP": "testing"}'" >> $GITHUB_OUTPUT

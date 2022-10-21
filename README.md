@@ -64,6 +64,8 @@ jobs:
 
 > **NOTE**: Be sure to set the value of each matrix field to a list type containing a single entry, otherwise the strategy.matrix will fail to parse the JSON format. This is because a strategy.matrix is typically used to generate multiple 'variants' of a job. By setting a single value inside a list, we ensure there is only ever one job variant generated (i.e. only one job is created), and that single job can simply reference the fields within the matrix as data points of interest.
 
+> **UPDATE**: `::set-output` is deprecated in favour of sending `key=value` to `$GITHUB_OUTPUT` (e.g. `echo "nvmrc-version=$(cat .nvmrc)" >> $GITHUB_OUTPUT`).
+
 ### Clarify the cache action
 
 The `actions/cache@v2` works like so...

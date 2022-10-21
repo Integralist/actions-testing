@@ -39,3 +39,6 @@ arr+="]"
 # so we do that using sed...
 
 echo "::set-output name=commits::$(echo $arr | sed 's/},]/}]/')"
+
+# UPDATED syntax:
+# echo "commits=$(echo $arr | sed 's/},]/}]/')" >> $GITHUB_OUTPUT
