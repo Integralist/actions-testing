@@ -16,6 +16,24 @@ jobs:
       - name: "Check AWK version"
         run: awk --version
 
+  testing-ripgrep-custom-install:
+    runs-on: ubuntu-latest
+    steps:
+      # - uses: actions/checkout@v3
+      #   with:
+      #     repository: 'BurntSushi/ripgrep'
+      #     path: 'ripgrep'
+      # - name: "Compile ripgrep with PCRE"
+      #   run: cd ripgrep && cargo install --features 'pcre2' --path .
+      # - name: "Check ripgrep version"
+      #   run: cd ripgrep && ls && ripgrep --version
+      - name: "Install and run ripgrep"
+        run: |
+          RIPGREP_VERSION=$(curl -s "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | grep -Po '"tag_name": "\K[0-9.]+')
+          curl -Lo ripgrep.deb "https://github.com/BurntSushi/ripgrep/releases/latest/download/ripgrep_${RIPGREP_VERSION}_amd64.deb"
+          sudo apt install -y ./ripgrep.deb
+          rg -h
+
   testing-script-sourcing:
     runs-on: ubuntu-latest
     steps:
