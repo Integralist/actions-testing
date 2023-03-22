@@ -6,6 +6,16 @@ concurrency: # cancel in progress runs on push
   group: ${{ github.ref_name }}
   cancel-in-progress: true
 jobs:
+  testing-awk-install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Update list of packages"
+        run: sudo apt-get update
+      - name: "Install AWK"
+        run: sudo apt-get -y install gawk
+      - name: "Check AWK version"
+        run: awk --version
+
   testing-script-sourcing:
     runs-on: ubuntu-latest
     steps:
