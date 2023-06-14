@@ -19,3 +19,12 @@ jobs:
         run: go env GOCACHE
       - name: "CHECK go env"
         run: go env
+      # The following condition doesn't work with Windows Powershell
+      #
+      # - name: "Check OSTYPE env var"
+      #   run: |
+      #     if [[ "$OSTYPE" == "linux-gnu" ]]; then
+      #       echo "Running on Linux"
+      #     else
+      #       echo "Not running on Linux $OSTYPE"
+      #     fi
