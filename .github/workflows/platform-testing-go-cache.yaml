@@ -1,0 +1,19 @@
+on: push
+name: Testing Go Cache on all platforms
+# Stop any in-flight CI jobs when a new commit is pushed.
+concurrency:
+  group: ${{ github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  testing-go-cache:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v3
+      - name: "Install Go"
+        uses: actions/setup-go@v4
+      - name: "Check GOCACHE"
+        run: go env GOCACHE
