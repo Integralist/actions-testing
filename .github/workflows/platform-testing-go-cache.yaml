@@ -17,3 +17,5 @@ jobs:
         uses: actions/setup-go@v4
       - name: "Check GOCACHE"
         run: go env GOCACHE
+      - name: "CHECK go env"
+        run: go env
