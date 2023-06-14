@@ -1,5 +1,8 @@
 name: Testing GitHub Actions on Windows
-on: [push]
+on:
+  push:
+    branches:
+      - "integralist/testing-windows"
 concurrency: # cancel in progress runs on push
   group: "windows-test"
   cancel-in-progress: true

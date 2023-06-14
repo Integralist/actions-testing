@@ -1,5 +1,8 @@
 name: Testing GitHub Actions
-on: [push]
+on:
+  push:
+    branches:
+      - "integralist/general-testing"
 env:
   GLOBAL: hello
 concurrency: # cancel in progress runs on push

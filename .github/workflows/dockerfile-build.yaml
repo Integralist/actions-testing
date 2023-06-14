@@ -1,7 +1,10 @@
-name: Testing Dockerfile Build
-on: [push]
-
-jobs:
+# name: Testing Dockerfile Build
+# on:
+#   push:
+#     branches:
+#       - "integralist/testing-docker-build"
+#
+# jobs:
   # NOTE: Doesn't work at all. You have to use an image published somewhere it seems.
   #
   # do-a-dockerfile-build:

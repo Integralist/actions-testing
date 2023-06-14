@@ -1,6 +1,9 @@
 # https://github.com/actions/runner-images/tree/main#available-images
 name: Testing What Software is installed by default
-on: [push]
+on:
+  push:
+    branches:
+      - "integralist/testing-installed-software"
 concurrency: # cancel in progress runs on push
   group: "software-test"
   cancel-in-progress: true

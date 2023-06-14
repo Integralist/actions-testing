@@ -1,5 +1,8 @@
 name: Matrix Shared Data
-on: push
+on:
+  push:
+    branches:
+      - "integralist/shared-data"
 jobs:
   job1:
     runs-on: ubuntu-latest
