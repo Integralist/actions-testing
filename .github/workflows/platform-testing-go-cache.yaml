@@ -19,12 +19,19 @@ jobs:
         run: go env GOCACHE
       - name: "CHECK go env"
         run: go env
-      # The following condition doesn't work with Windows Powershell
-      #
-      # - name: "Check OSTYPE env var"
-      #   run: |
-      #     if [[ "$OSTYPE" == "linux-gnu" ]]; then
-      #       echo "Running on Linux"
-      #     else
-      #       echo "Not running on Linux $OSTYPE"
-      #     fi
+      - name: "Write to GITHUB_OUTPUT"
+        run: |
+          echo "go-build=$(go env GOCACHE)" >> $GITHUB_OUTPUT
+          echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
+      - name: "Check OS platform"
+        run: |
+          echo "platform: ${{ runner.os }}"
+      - name: "Platform specific code"
+        run: |
+          if [ "${{ matrix.os }}" == 'ubuntu-latest' ]; then
+            echo "Running on Linux"
+          elif [ "${{ matrix.os }}" == 'macos-latest' ]; then
+            echo "Running on macOS"
+          elif [ "${{ matrix.os }}" == 'windows-latest' ]; then
+            echo "Running on Windows"
+          fi
