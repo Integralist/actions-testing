@@ -26,12 +26,14 @@ jobs:
       - name: "Check OS platform"
         run: |
           echo "platform: ${{ runner.os }}"
-      - name: "Platform specific code"
-        run: |
-          if [ "${{ matrix.os }}" == 'ubuntu-latest' ]; then
-            echo "Running on Linux"
-          elif [ "${{ matrix.os }}" == 'macos-latest' ]; then
-            echo "Running on macOS"
-          elif [ "${{ matrix.os }}" == 'windows-latest' ]; then
-            echo "Running on Windows"
-          fi
+      # The following doesn't work as the if statement doesn't work for Windows.
+      #
+      # - name: "Platform specific code"
+      #   run: |
+      #     if [ "${{ matrix.os }}" == 'ubuntu-latest' ]; then
+      #       echo "Running on Linux"
+      #     elif [ "${{ matrix.os }}" == 'macos-latest' ]; then
+      #       echo "Running on macOS"
+      #     elif [ "${{ matrix.os }}" == 'windows-latest' ]; then
+      #       echo "Running on Windows"
+      #     fi
