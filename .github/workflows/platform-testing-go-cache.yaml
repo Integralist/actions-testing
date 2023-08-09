@@ -1,4 +1,7 @@
-on: push
+on:
+  push:
+    branches:
+      - "integralist/testing-go-cache"
 name: Testing Go Cache on all platforms
 # Stop any in-flight CI jobs when a new commit is pushed.
 concurrency:
