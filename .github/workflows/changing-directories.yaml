@@ -1,4 +1,7 @@
-on: push
+on:
+  push:
+    branches:
+      - "integralist/test-changing-directories"
 name: Testing if CD of directory persists each step
 # Stop any in-flight CI jobs when a new commit is pushed.
 concurrency:
