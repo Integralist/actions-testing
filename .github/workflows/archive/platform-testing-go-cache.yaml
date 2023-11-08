@@ -1,0 +1,42 @@
+# on:
+#   push:
+#     branches:
+#       - "integralist/testing-go-cache"
+# name: Testing Go Cache on all platforms
+# # Stop any in-flight CI jobs when a new commit is pushed.
+# concurrency:
+#   group: ${{ github.ref_name }}
+#   cancel-in-progress: true
+# jobs:
+#   testing-go-cache:
+#     strategy:
+#       matrix:
+#         platform: [ubuntu-latest, macos-latest, windows-latest]
+#     runs-on: ${{ matrix.platform }}
+#     steps:
+#       - name: "Checkout code"
+#         uses: actions/checkout@v3
+#       - name: "Install Go"
+#         uses: actions/setup-go@v4
+#       - name: "Check GOCACHE"
+#         run: go env GOCACHE
+#       - name: "CHECK go env"
+#         run: go env
+#       - name: "Write to GITHUB_OUTPUT"
+#         run: |
+#           echo "go-build=$(go env GOCACHE)" >> $GITHUB_OUTPUT
+#           echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
+#       - name: "Check OS platform"
+#         run: |
+#           echo "platform: ${{ runner.os }}"
+#       # The following doesn't work as the if statement doesn't work for Windows.
+#       #
+#       # - name: "Platform specific code"
+#       #   run: |
+#       #     if [ "${{ matrix.os }}" == 'ubuntu-latest' ]; then
+#       #       echo "Running on Linux"
+#       #     elif [ "${{ matrix.os }}" == 'macos-latest' ]; then
+#       #       echo "Running on macOS"
+#       #     elif [ "${{ matrix.os }}" == 'windows-latest' ]; then
+#       #       echo "Running on Windows"
+#       #     fi

@@ -1,0 +1,17 @@
+# # https://github.com/actions/runner-images/tree/main#available-images
+# name: Testing What Software is installed by default
+# on:
+#   push:
+#     branches:
+#       - "integralist/testing-installed-software"
+# concurrency: # cancel in progress runs on push
+#   group: "software-test"
+#   cancel-in-progress: true
+# jobs:
+#   testing-finding-software:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#       - run: ruby --version # default is 2.7.0p0
+#       - run: jq --version
+#       - run: ./convert-yaml.sh

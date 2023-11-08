@@ -1,0 +1,93 @@
+# name: Matrix Shared Data
+# on:
+#   push:
+#     branches:
+#       - "integralist/shared-data"
+# jobs:
+#   job1:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       matrix: ${{ steps.set-matrix.outputs.matrix }}
+#     steps:
+#       - id: set-matrix
+#         run: echo "::set-output name=matrix::{\"anything\":[{\"project\":\"foo\",\"config\":\"Debug\"}]}"
+#   job2:
+#     needs: job1
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix: ${{fromJSON(needs.job1.outputs.matrix)}}
+#     steps:
+#       - run: echo ${{ matrix }}
+#
+#   job3:
+#     strategy:
+#       matrix:
+#         tinygo-version: [0.24.0]
+#         platform: [ubuntu-latest, macos-latest, windows-latest]
+#     runs-on: ${{ matrix.platform }}
+#     steps:
+#       - if: ${{ matrix.platform != 'windows-latest' }}
+#         id: set_env
+#         run: echo ::set-output name=run_tests::true
+#       - if: ${{ matrix.platform == 'ubuntu-latest' }}
+#         run: echo "1. we're running on ${{ matrix.platform }} with env TEST_RUN set to ${{ env.TEST_RUN }}"
+#         env:
+#           TEST_RUN: ${{ steps.set_env.outputs.run_tests }}
+#       - if: ${{ matrix.platform == 'macos-latest' }}
+#         run: echo "2. we're running on ${{ matrix.platform }} with env TEST_RUN set to ${{ env.TEST_RUN }}"
+#         env:
+#           TEST_RUN: ${{ steps.set_env.outputs.run_tests }}
+#       - if: ${{ matrix.platform == 'windows-latest' }}
+#         run: echo "3. we're running on ${{ matrix.platform }} with env TEST_RUN set to ${{ env.TEST_RUN }}"
+#         env:
+#           TEST_RUN: ${{ steps.set_env.outputs.run_tests }}
+#       - if: ${{ matrix.platform == 'ubuntu-latest' }}
+#         run: |
+#           wget https://github.com/tinygo-org/tinygo/releases/download/v${{ matrix.tinygo-version }}/tinygo_${{ matrix.tinygo-version }}_amd64.deb
+#           sudo dpkg -i tinygo_${{ matrix.tinygo-version }}_amd64.deb
+#           echo "/usr/local/bin" >> $GITHUB_PATH
+#           tinygo version
+#       - if: ${{ matrix.platform == 'macos-latest' }}
+#         run: |
+#           brew tap tinygo-org/tools
+#           brew install tinygo
+#           tinygo version
+#           # wget https://github.com/tinygo-org/tinygo/releases/download/v${{ matrix.tinygo-version }}/tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
+#           # tar -xvf tinygo${{ matrix.tinygo-version }}.darwin-amd64.tar.gz
+#           # tinygo/bin/tinygo version
+#           # echo "${{ github.workspace }}"
+#           # echo "${{ env.PATH }}"
+#           # echo "${{ github.workspace }}/tinygo/bin" >> $GITHUB_PATH
+#       # - if: ${{ matrix.platform == 'macos-latest' }}
+#       #   run: |
+#       #     echo "${{ env.PATH }}"
+#       #     tinygo version
+#       - if: ${{ matrix.platform == 'windows-latest' }}
+#         run: |
+#           iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+#           scoop install go
+#           scoop install tinygo
+#           tinygo version
+#           $Env:Path
+#           echo "~\scoop\shims" >> $GITHUB_PATH
+#       - if: ${{ matrix.platform == 'windows-latest' }}
+#         run: |
+#           $Env:Path
+#           dir ~\scoop
+#           dir ~\scoop\apps
+#           dir ~\scoop\shims
+#           # type ~\scoop\apps\tinygo
+#           # type ~\scoop\shims\tinygo.shim
+#           ~\scoop\shims\go.shim
+#           ~\scoop\shims\gofmt.shim
+#           ~\scoop\shims\tinygo.shim
+#           ~\scoop\shims\scoop
+#           tinygo version
+#       # - if: ${{ matrix.platform == 'windows-latest' }}
+#       #   uses: MinoruSekine/setup-scoop@v1 # https://github.com/MinoruSekine/setup-scoop/issues/7#issuecomment-1183050540
+#       # - if: ${{ matrix.platform == 'windows-latest' }}
+#       #   run: scoop install go
+#       # - if: ${{ matrix.platform == 'windows-latest' }}
+#       #   run: scoop install tinygo
+#       # - if: ${{ matrix.platform == 'windows-latest' }}
+#       #   run: tinygo version

@@ -1,0 +1,17 @@
+# name: Testing Go Env Vars ALL platforms
+# on: push
+# jobs:
+#   job3:
+#     strategy:
+#       matrix:
+#         tinygo-version: [0.24.0]
+#         platform: [ubuntu-latest, macos-latest, windows-latest]
+#     runs-on: ${{ matrix.platform }}
+#     steps:
+#       - name: Install Go
+#         uses: actions/setup-go@v4
+#         with:
+#           go-version: 1.21.x
+#       - uses: actions/checkout@v3
+#       - name: Run Go project
+#         run: cd go-project && go run main.go

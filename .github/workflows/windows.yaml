@@ -1,16 +1,43 @@
 name: Testing GitHub Actions on Windows
-on:
-  push:
-    branches:
-      - "integralist/testing-windows"
+on: push
 concurrency: # cancel in progress runs on push
   group: "windows-test"
   cancel-in-progress: true
+defaults:
+  run:
+    shell: bash
 jobs:
-  testing-finding-of-files:
+  testing-go-os-arch-1:
+    runs-on: windows-2022
+    steps:
+      - run: go env
+  testing-go-os-arch-2:
+    runs-on: windows-2019
+    steps:
+      - run: go env
+  testing-go-os-arch-3:
     runs-on: windows-latest
     steps:
-      - run: mkdir -p foo\bar
-      - run: Get-ChildItem -Force -recurse
-      - run: ni .\foo\bar\main.go
-      - run: where /r foo *.go
+      - uses: actions/checkout@v4
+        with:
+          repository: 'fastly/cli'
+          ref: 'integralist/fix-wasm-tools-windows'
+      - uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+      - run: go version
+      - uses: taiki-e/cache-cargo-install-action@v1
+        with:
+          tool: tomlq
+      - run: ./scripts/config.sh
+      - run: go install ./cmd/fastly # can't use `make install` as it uses CGO_ENABLED env var which Windows doesn't understand (also `make config` doesn't work).
+      - run: fastly version
+      - run: fastly compute init --language go --non-interactive
+      - run: fastly compute build --verbose
+  # testing-finding-of-files:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - run: mkdir -p foo\bar
+  #     - run: Get-ChildItem -Force -recurse
+  #     - run: ni .\foo\bar\main.go
+  #     - run: where /r foo *.go

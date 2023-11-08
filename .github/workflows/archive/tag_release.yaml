@@ -1,0 +1,28 @@
+# name: Tag Release
+# on:
+#   push:
+#     tags:
+#       - 'v*'
+#
+# jobs:
+#   print_tag:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0 # necessary to get the git previous tag to work
+#       - name: "Print Tag"
+#         run: echo ${{ github.ref_name }}
+#       - name: "Get previous tag"
+#         run: git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1)
+#       - name: "Number of commits since last tag"
+#         run: git log $(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))..HEAD
+#       - name: "Generate commits"
+#         id: generate-commits
+#         run: ./create_commits.sh
+#       - name: Create Sentry release
+#         run: |
+#           curl https://sentry.io/api/0/organizations/DOESNT_EXIST/releases/ \
+#            -H 'Authorization: Bearer PURPOSEFULLY_MISSING' \
+#            -H 'Content-Type: application/json' \
+#            -d '{"version":"${{ github.ref_name }}","ref":"${{ github.sha }}","commits":${{ steps.generate-commits.outputs.commits }},"url":"https://github.com/fastly/cli/releases/tag/v${{ github.ref_name }}","projects":["${{ secrets.SENTRY_PROJECT }}"]}'
