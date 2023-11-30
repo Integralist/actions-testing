@@ -1,0 +1,20 @@
+name: Testing Ripgrep Install
+on: push
+concurrency: # cancel in progress runs on push
+  group: "ripgrep-test"
+  cancel-in-progress: true
+defaults:
+  run:
+    shell: bash
+jobs:
+  install-ripgrep:
+    name: Install Ripgrep
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Install Ripgrep"
+        run: |
+          RIPGREP_VERSION=$(curl -s "https://api.github.com/repos/BurntSushi/ripgrep/releases/latest" | grep -Po '"tag_name": "\K[0-9.]+')
+          RIPGREP_VERSION=13.0.0
+          curl -LO "https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREP_VERSION}/ripgrep_${RIPGREP_VERSION}_amd64.deb"
+          sudo dpkg -i "ripgrep_${RIPGREP_VERSION}_amd64.deb"
+          rg -h
