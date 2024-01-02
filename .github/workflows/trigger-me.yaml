@@ -1,8 +1,8 @@
-name: Workflow that runs on PRs (some change)
+name: Workflow that runs on PRs
 on:
-  push:
-    branches:
-      - "integralist/validating-ok-to-test"
+  pull_request:
+  repository_dispatch:
+    types: [ok-to-test-command]
 concurrency: # cancel in progress runs on push
   group: "ok-to-test-validation"
   cancel-in-progress: true
