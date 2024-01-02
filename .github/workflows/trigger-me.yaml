@@ -1,4 +1,4 @@
-name: Workflow that runs on PRs
+name: Workflow that runs on PRs (some change)
 on:
   push:
     branches:
