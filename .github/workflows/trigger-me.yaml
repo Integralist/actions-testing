@@ -1,0 +1,18 @@
+name: Workflow that runs on PRs
+on:
+  push:
+    branches:
+      - "integralist/validating-ok-to-test"
+concurrency: # cancel in progress runs on push
+  group: "ok-to-test-validation"
+  cancel-in-progress: true
+defaults:
+  run:
+    shell: bash
+jobs:
+  do-something:
+    name: Do Something
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Whatever"
+        run: echo here
