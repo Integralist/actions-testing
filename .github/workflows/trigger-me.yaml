@@ -25,9 +25,12 @@ jobs:
   # This will run the build not as the forked owner but as your own token user.
   do-something-fork:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      checks: write
+    # NOTE: Commented these out because they cause the job to not run.
+    # Maybe because the token itself used to trigger the job was public_repo and not repo ?
+    #
+    # permissions:
+    #   pull-requests: write
+    #   checks: write
     if: |
       github.event_name == 'repository_dispatch' &&
       github.event.client_payload.slash_command.args.named.sha != '' &&
@@ -47,10 +50,8 @@ jobs:
     - name: "Whatever"
       run: echo here
 
-    - run: |
-        echo "Integration tests... success! ;-)"
-
-    # Update check run called "integration-fork"
+    # Update check run
+    # IMPORTANT: For some dependabot PRs I needed a check for check[0] below
     - uses: actions/github-script@v6
       id: update-check-run
       if: ${{ always() }}
@@ -74,6 +75,10 @@ jobs:
           });
 
           const check = checks.check_runs.filter(c => c.name === process.env.job);
+
+          if (check[0] == undefined) {
+            return;
+          }
 
           const { data: result } = await github.rest.checks.update({
             ...context.repo,
