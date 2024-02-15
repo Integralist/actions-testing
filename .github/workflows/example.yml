@@ -1,0 +1,9 @@
+on:
+  push
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "TF_VAR_author=\"$(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]')\"" >> "${GITHUB_ENV}"
+      - run: echo ${{ env.TF_VAR_author }}
