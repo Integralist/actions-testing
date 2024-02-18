@@ -5,5 +5,20 @@ jobs:
   example:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "TF_VAR_author=\"$(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]')\"" >> "${GITHUB_ENV}"
-      - run: echo ${{ env.TF_VAR_author }}
+      - name: Debug context
+        run: |
+          echo github.actor: ${{ github.actor }}
+          echo github.triggering_actor: ${{ github.triggering_actor }}
+          echo github.event_name: ${{ github.event_name }}
+          echo github.base_ref: ${{ github.base_ref }}
+          echo github.head_ref: ${{ github.head_ref }}
+          echo github.ref: ${{ github.ref }}
+          echo github.ref_name: ${{ github.ref_name }}
+          echo github.ref_type: ${{ github.ref_type }}
+          echo github.event.workflow_run.event: ${{ github.event.workflow_run.event }}
+          echo github.event.workflow_run.conclusion: ${{ github.event.workflow_run.conclusion }}
+          echo github.event.pull_request.user.login: ${{ github.event.pull_request.user.login }}
+      - name: Lowercase Actor
+        run: echo "TF_VAR_author=\"$(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]')\"" >> "${GITHUB_ENV}"
+      - name: Check environment variable
+        run: echo ${{ env.TF_VAR_author }}
