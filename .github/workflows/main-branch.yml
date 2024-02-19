@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create tag
-        run: echo "GIT_STAGE_TAG=\"stg/$(date +'%Y-%m-%d/%H-%M-%SZ')/$(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]' | tr -d ' ')\"" >> "${GITHUB_ENV}"
+        run: echo "GIT_STAGE_TAG=stg/$(date +'%Y-%m-%d/%H-%M-%SZ')/$(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]' | tr -d ' ')" >> "${GITHUB_ENV}"
       - name: Check tag
         run: echo "$GIT_STAGE_TAG"
       - name: Apply tag
