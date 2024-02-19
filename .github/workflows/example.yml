@@ -1,5 +1,6 @@
 on:
-  push
+  push:
+  pull_request:
 
 jobs:
   example:
@@ -22,3 +23,17 @@ jobs:
         run: echo "TF_VAR_author=\"$(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]')\"" >> "${GITHUB_ENV}"
       - name: Check environment variable
         run: echo ${{ env.TF_VAR_author }}
+
+  check-pull-request-opened:
+    name: "Check Pull Request Opened"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.opened == true
+    steps:
+      - run: echo "PR opened"
+
+  check-pull-request-merged:
+    name: "Check Pull Request Merged"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - run: echo "PR merged"
