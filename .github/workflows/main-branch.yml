@@ -52,7 +52,7 @@ jobs:
       - name: Download the artifact
         run: gh run download -n SOME_ARTIFACT_NAME
       - name: Check file
-        run: tree && mv example.txt foo/bar/baz/ && cat foo/bar/baz/example.txt
+        run: tree && mv example.txt foo/bar/baz/ && cat foo/bar/baz/example.txt # IMPORTANT: Move the file to the location you need it
 
   tag-current-commit:
     name: "Tag current commit"
