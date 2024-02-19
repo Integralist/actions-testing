@@ -26,6 +26,34 @@ jobs:
       - name: Check environment variable
         run: echo ${{ env.TF_VAR_author }}
 
+  upload-an-artifact:
+    name: "Upload an artifact"
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 # IMPORTANT: Can't use `gh` without it being a git repo
+      - name: Make nested directory for file
+        run: mkdir -p foo/bar/baz/ && tree
+      - name: Create a file to be uploaded as artifact
+        run: echo "my file" >> foo/bar/baz/example.txt
+      - name: Check file
+        run: cat foo/bar/baz/example.txt && tree
+      - name: Upload file as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SOME_ARTIFACT_NAME
+          path: foo/bar/baz/example.txt
+          retention-days: 1
+          overwrite: true
+      - name: Delete the original file
+        run: rm foo/bar/baz/example.txt && tree
+      - name: Download the artifact
+        run: gh run download -n SOME_ARTIFACT_NAME
+      - name: Check file
+        run: tree && cat foo/bar/baz/example.txt
+
   tag-current-commit:
     name: "Tag current commit"
     runs-on: ubuntu-latest
