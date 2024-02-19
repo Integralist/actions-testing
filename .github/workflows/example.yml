@@ -33,25 +33,25 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.opened == true
     steps:
-      - run: echo "PR opened - 2"
+      - run: echo "PR opened - 3"
 
   check-pull-request-edited:
     name: "Check Pull Request Edited"
     runs-on: ubuntu-latest
     if: github.event.pull_request.edited == true
     steps:
-      - run: echo "PR opened - 2"
+      - run: echo "PR opened - 3"
 
   check-pull-request-merged:
     name: "Check Pull Request Merged"
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
-      - run: echo "PR merged - 2"
+      - run: echo "PR merged - 3"
 
   check-pull-request-closed:
     name: "Check Pull Request Closed"
     runs-on: ubuntu-latest
     if: github.event.pull_request.closed == true
     steps:
-      - run: echo "PR closed - 2"
+      - run: echo "PR closed - 3"
