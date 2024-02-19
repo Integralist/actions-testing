@@ -35,7 +35,7 @@ jobs:
       - name: Check tag
         run: echo "$GIT_STAGE_TAG"
       - name: Apply tag
-        uses: actions/github-script@v5
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.git.createRef({
