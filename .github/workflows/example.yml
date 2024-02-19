@@ -29,11 +29,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.opened == true
     steps:
-      - run: echo "PR opened"
+      - run: echo "PR opened - 1"
 
   check-pull-request-merged:
     name: "Check Pull Request Merged"
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
-      - run: echo "PR merged"
+      - run: echo "PR merged - 1"
