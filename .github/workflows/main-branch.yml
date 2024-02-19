@@ -26,6 +26,28 @@ jobs:
       - name: Check environment variable
         run: echo ${{ env.TF_VAR_author }}
 
+  upload-an-artifact:
+    name: "Upload an artifact"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a file to be uploaded as artifact
+        run: echo "my file" >> example.txt
+      - name: Check file
+        run: cat example.txt
+      - name: Upload file as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SOME_ARTIFACT_NAME
+          path: example.txt
+          retention-days: 1
+          overwrite: true
+      - name: Delete the original file
+        run: rm example.txt
+      - name: Check file
+        run: cat example.txt
+      - name: Download the artifact
+        run: gh run download -n SOME_ARTIFACT_NAME
+
   tag-current-commit:
     name: "Tag current commit"
     runs-on: ubuntu-latest
