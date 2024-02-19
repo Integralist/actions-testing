@@ -1,7 +1,10 @@
 on:
   push:
   pull_request:
-
+    types:
+      - opened
+      - edited
+      - closed
 jobs:
   example:
     runs-on: ubuntu-latest
@@ -32,9 +35,23 @@ jobs:
     steps:
       - run: echo "PR opened - 1"
 
+  check-pull-request-edited:
+    name: "Check Pull Request Edited"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.edited == true
+    steps:
+      - run: echo "PR opened - 1"
+
   check-pull-request-merged:
     name: "Check Pull Request Merged"
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
       - run: echo "PR merged - 1"
+
+  check-pull-request-closed:
+    name: "Check Pull Request Closed"
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.closed == true
+    steps:
+      - run: echo "PR closed - 1"
