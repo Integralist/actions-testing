@@ -1,6 +1,8 @@
 on:
+  workflow_dispatch:
   push:
-  pull_request:
+    branches:
+      - main
 jobs:
   example:
     runs-on: ubuntu-latest
@@ -24,9 +26,21 @@ jobs:
       - name: Check environment variable
         run: echo ${{ env.TF_VAR_author }}
 
-  check-pull-request-merged:
-    name: "Check Pull Request Merged"
+  tag-current-commit:
+    name: "Tag current commit"
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
-      - run: echo "PR merged"
+      - name: Create tag
+        run: echo "GIT_STAGE_TAG=\"stg/$(date +'%Y-%m-%d/%H-%M-%SZ')/$(echo ${{ github.triggering_actor }} | tr '[:upper:]' '[:lower:]' | tr -d ' ')\"" >> "${GITHUB_ENV}"
+      - name: Check tag
+        run: echo "$GIT_STAGE_TAG"
+      # - name: Apply tag
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       github.rest.git.createRef({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         ref: 'refs/tags/<tagname>',
+      #         sha: context.sha
+      #       })
