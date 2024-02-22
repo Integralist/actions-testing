@@ -25,8 +25,8 @@ returnSuccessfulExitCode && echo ::set-output name=was_success::true
 FOO=abc
 BAR=xyz
 JSON_STRING=$(jq -n --arg foo "$FOO" --arg bar "$BAR" '{"FOO": [$foo], "BAR": [$bar]}')
-echo $JSON_STRING
-echo ::set-output name=matrix::$JSON_STRING
+echo "$JSON_STRING"
+echo ::set-output name=matrix::"$JSON_STRING"
 # NOTE: It's important the key's value is a list in order for GitHub Actions to
 # be able to generate a valid strategy matrix from the JSON data.
 
@@ -37,3 +37,5 @@ echo ::set-output name=custom_json::'{"BEEP": 123, "BOOP": "testing"}'
 # UPDATED syntax:
 # echo "matrix=$JSON_STRING" >> $GITHUB_OUTPUT
 # echo "custom_json='{"BEEP": 123, "BOOP": "testing"}'" >> $GITHUB_OUTPUT
+#
+# ...
