@@ -3,6 +3,14 @@ on:
     types: [opened, edited, closed, reopened]
 
 jobs:
+  whatever_event:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo ran because of some event
+        echo github.event.action: '${{ github.event.action }}'
+
   if_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
