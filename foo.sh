@@ -38,4 +38,4 @@ echo ::set-output name=custom_json::'{"BEEP": 123, "BOOP": "testing"}'
 # echo "matrix=$JSON_STRING" >> $GITHUB_OUTPUT
 # echo "custom_json='{"BEEP": 123, "BOOP": "testing"}'" >> $GITHUB_OUTPUT
 #
-# ...12
+# ...
