@@ -1,7 +1,9 @@
 on:
   push: # IMPORTANT: required for when wanting to run jobs for PR changes
   pull_request:
-    # types: [opened, edited, closed, reopened]
+    types: [opened, edited, closed, reopened] # IMPORTANT: We need this for `github.event.pull_request.merged == true` to work
+
+    # NOTE: If we didn't set types then `pull_request:` by itself wouldn't identify a closed PR event but it would be fine without a `push:`
 
 jobs:
   whatever_event:
@@ -9,6 +11,7 @@ jobs:
     steps:
     - run: |
         echo ran because of some event
+        echo github.event_name: ${{ github.event_name }}
         echo github.event.action: '${{ github.event.action }}' # "opened" when PR is opened, then "" if pushing commits to the PR, then "closed" when PR is closed
         echo github: '${{ toJSON(github) }}'
 
@@ -18,6 +21,8 @@ jobs:
     steps:
     - run: |
         echo The PR was merged
+        echo github.event_name: ${{ github.event_name }}
+        echo github.event.action: '${{ github.event.action }}' # "opened" when PR is opened, then "" if pushing commits to the PR, then "closed" when PR is closed
         echo github.head_ref: '${{ github.head_ref }}'
         echo github: '${{ toJSON(github) }}'
         echo env: '${{ toJSON(env) }}'
