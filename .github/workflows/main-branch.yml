@@ -17,6 +17,7 @@ jobs:
           echo github.ref: ${{ github.ref }}
           echo github.ref_name: ${{ github.ref_name }}
           echo github.ref_type: ${{ github.ref_type }}
+          echo github.event: '${{ toJSON(github.event) }}'
           echo github.event.workflow_run.event: ${{ github.event.workflow_run.event }}
           echo github.event.workflow_run.conclusion: ${{ github.event.workflow_run.conclusion }}
           echo github.event.pull_request.user.login: ${{ github.event.pull_request.user.login }}
