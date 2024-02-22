@@ -1,7 +1,7 @@
 on:
-  push: # IMPORTANT: required for when wanting to run jobs for PR changes
+  # push: # IMPORTANT: required for when wanting to run jobs for PR changes
   pull_request:
-    types: [opened, edited, closed, reopened] # IMPORTANT: We need this for `github.event.pull_request.merged == true` to work
+    # types: [opened, edited, closed, reopened] # IMPORTANT: We need this for `github.event.pull_request.merged == true` to work
 
     # NOTE: If we didn't set types then `pull_request:` by itself wouldn't identify a closed PR event but it would be fine without a `push:`
 
