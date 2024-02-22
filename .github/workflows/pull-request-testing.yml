@@ -9,7 +9,7 @@ jobs:
     steps:
     - run: |
         echo ran because of some event
-        echo github.event.action: '${{ github.event.action }}'
+        echo github.event.action: '${{ github.event.action }}' # "opened" when PR is opened, then "" if pushing commits to the PR, then "closed" when PR is closed
         echo github: '${{ toJSON(github) }}'
 
   if_merged:
