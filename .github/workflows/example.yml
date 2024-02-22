@@ -29,4 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     steps:
-      - run: echo "PR merged"
+      - run: |
+          echo "PR merged"
+          echo github.base_ref: ${{ github.base_ref }}
+          echo github.head_ref: ${{ github.head_ref }}
+          echo github.ref: ${{ github.ref }}
+          echo github.ref_name: ${{ github.ref_name }}
+          echo github.ref_type: ${{ github.ref_type }}
