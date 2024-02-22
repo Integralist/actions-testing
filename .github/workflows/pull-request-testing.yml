@@ -1,7 +1,7 @@
 on:
   push: # IMPORTANT: required for when wanting to run jobs for PR changes
   pull_request:
-    types: [opened, edited, closed, reopened]
+    # types: [opened, edited, closed, reopened]
 
 jobs:
   whatever_event:
