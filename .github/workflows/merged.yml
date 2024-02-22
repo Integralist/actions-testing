@@ -1,7 +1,7 @@
 on:
   pull_request:
-    types:
-      - closed
+    # types:
+    #   - closed
 
 jobs:
   if_merged:
@@ -10,6 +10,7 @@ jobs:
     steps:
     - run: |
         echo The PR was merged
+        echo github.head_ref: '${{ github.head_ref }}'
         echo github: '${{ toJSON(github) }}'
         echo env: '${{ toJSON(env) }}'
         echo vars: '${{ toJSON(vars) }}'
