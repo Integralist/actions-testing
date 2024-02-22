@@ -1,4 +1,5 @@
 on:
+  push: # IMPORTANT: required for when wanting to run jobs for PR changes
   pull_request:
     types: [opened, edited, closed, reopened]
 
@@ -9,6 +10,7 @@ jobs:
     - run: |
         echo ran because of some event
         echo github.event.action: '${{ github.event.action }}'
+        echo github: '${{ toJSON(github) }}'
 
   if_merged:
     if: github.event.pull_request.merged == true
