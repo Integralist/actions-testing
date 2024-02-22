@@ -1,7 +1,6 @@
 on:
   pull_request:
-    # types:
-    #   - closed
+    types: [opened, edited, closed, reopened]
 
 jobs:
   if_merged:
