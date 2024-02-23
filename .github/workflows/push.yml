@@ -1,0 +1,6 @@
+on: push
+jobs:
+  pushed_event:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "$PATH"
