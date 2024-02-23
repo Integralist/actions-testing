@@ -6,3 +6,4 @@ jobs:
     - run: echo "$PATH"
     - run: touch foo.txt && sudo cp foo.txt /usr/local/bin/foo.txt
     - run: ls /usr/local/bin/
+    - run: make bin-viceroy
