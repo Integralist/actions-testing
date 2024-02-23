@@ -1,6 +1,6 @@
 .PHONY: bin-viceroy
 bin-viceroy:
-	@arch=$$(uname -m); \
+	@arch=$$(uname -m | sed 's/x86_64/amd64/'); \
 	echo $$arch; \
 	os=$$(uname -s | tr '[:upper:]' '[:lower:]'); \
 	echo $$os; \
