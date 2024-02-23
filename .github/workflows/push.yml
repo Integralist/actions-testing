@@ -3,6 +3,7 @@ jobs:
   pushed_event:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - run: echo "$PATH"
     - run: touch foo.txt && sudo cp foo.txt /usr/local/bin/foo.txt
     - run: ls /usr/local/bin/
