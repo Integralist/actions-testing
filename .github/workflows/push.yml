@@ -4,3 +4,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: echo "$PATH"
+    - run: touch foo.txt && cp foo.txt /usr/local/bin/foo.txt
+    - run: ls /usr/local/bin/
