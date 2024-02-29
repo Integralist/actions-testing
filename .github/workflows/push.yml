@@ -11,6 +11,13 @@ jobs:
     - uses: ./.github/actions/debug
       with:
         destroy: "true"
+    - uses: ./.github/actions/debug
+      with:
+        destroy: false
+    - uses: ./.github/actions/debug
+      with:
+        destroy: "false"
+    - uses: ./.github/actions/debug
     - run: go version
     - run: echo "$PATH"
     - run: touch foo.txt && sudo cp foo.txt /usr/local/bin/foo.txt

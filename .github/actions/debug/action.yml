@@ -3,7 +3,6 @@ description: "Prints information related to the environment for debugging purpos
 inputs:
   destroy:
     description: A boolean field (user can pass a string or an actual boolean!)
-    required: true
     default: "false"
 runs:
   using: composite
