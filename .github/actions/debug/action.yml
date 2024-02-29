@@ -1,0 +1,26 @@
+name: "Debug"
+description: "Prints information related to the environment for debugging purposes."
+inputs:
+  destroy:
+    description: A boolean field (user can pass a string or an actual boolean!)
+    required: true
+    default: "false"
+runs:
+  using: composite
+  steps:
+    - name: Debug context
+      shell: bash
+      run: |
+        echo ${{ inputs.destroy == true || inputs.destroy == 'true' }}
+        echo github.actor: ${{ github.actor }}
+        echo github.triggering_actor: ${{ github.triggering_actor }}
+        echo github.event_name: ${{ github.event_name }}
+        echo github.base_ref: ${{ github.base_ref }}
+        echo github.head_ref: ${{ github.head_ref }}
+        echo github.ref: ${{ github.ref }}
+        echo github.ref_name: ${{ github.ref_name }}
+        echo github.ref_type: ${{ github.ref_type }}
+        echo github.event.workflow_run.event: ${{ github.event.workflow_run.event }}
+        echo github.event.workflow_run.conclusion: ${{ github.event.workflow_run.conclusion }}
+        echo github.event.pull_request.user.login: ${{ github.event.pull_request.user.login }}
+        echo github.event.workflow_run.conclusion: ${{ github.event.workflow_run.conclusion }}
