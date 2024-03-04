@@ -1,6 +1,6 @@
 on:
   push:
-    paths:
+    paths: # IMPORTANT: don't use relative paths!
       - 'compute-project/**'
       - 'go-project/**'
 jobs:
