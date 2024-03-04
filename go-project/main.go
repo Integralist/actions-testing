@@ -7,5 +7,5 @@ import (
 
 func main() {
 	fmt.Printf("%#v\n", os.Environ())
-	//
+	// 2
 }
