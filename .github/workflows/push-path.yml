@@ -1,8 +1,8 @@
 on:
   push:
     paths:
-      - ./compute-project/**
-      - ./go-project/**
+      - './compute-project/**'
+      - './go-project/**'
 jobs:
   pushed_event:
     runs-on: ubuntu-latest
