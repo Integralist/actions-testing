@@ -18,6 +18,7 @@ jobs:
       with:
         destroy: "false"
     - uses: ./.github/actions/debug
+    - run: echo "foo=\"$(date +"%s")\""
     - run: go version
     - run: echo "$PATH"
     - run: touch foo.txt && sudo cp foo.txt /usr/local/bin/foo.txt
