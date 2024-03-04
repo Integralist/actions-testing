@@ -16,9 +16,9 @@ on:
 
 ## Automatically cancel in-flight workflows
 
-The `concurrency` setting allows you to restrict a workflow to one 'group' at a time. 
+The `concurrency` setting allows you to restrict a workflow to one 'group' at a time.
 
-Now if you're working on a PR which executes a workflow, then the workflow is likely getting run on every single push to the PR. 
+Now if you're working on a PR which executes a workflow, then the workflow is likely getting run on every single push to the PR.
 
 An example of why this is a problem is if you have just pushed a _broken_ commit and now you're pushing a new commit on top to fix it, then the workflow from the previous commit (the broken one) is still going to run, it's still going to use up resources but ultimately it's going to fail.
 
@@ -77,9 +77,9 @@ The `actions/cache@v2` works like so...
     key: ${{ runner.os }}-my-cache-key
 ```
 
-When the step that implements the action is executed (see above snippet), the cache action simply looks up the cache key (e.g. `Linux-my-cache-key`) and if it finds something in the cache, then it restores the cache to the path you specified (e.g. `path/to/be/cached`). 
+When the step that implements the action is executed (see above snippet), the cache action simply looks up the cache key (e.g. `Linux-my-cache-key`) and if it finds something in the cache, then it restores the cache to the path you specified (e.g. `path/to/be/cached`).
 
-If the cache action doesn't find anything in the cache, then nothing happens. 
+If the cache action doesn't find anything in the cache, then nothing happens.
 
 Now the important bit: the cache action has a 'post run' event that executes once your job has finished successfully. The cache action will be run again and this time it stores whatever was in your given path into the cache using the key you said it should be stored under.
 
@@ -198,3 +198,5 @@ In the following example the `bar` job will not run if the required fields `foo`
     steps:
       - run: echo 'yay! this job ran as the bar job was successful'
 ```
+
+...
