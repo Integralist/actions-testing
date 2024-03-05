@@ -3,7 +3,7 @@ jobs:
   pushed_event:
     runs-on: ubuntu-latest
     outputs:
-      continue: "true"
+      continue: "false"
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-go@v5
