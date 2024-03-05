@@ -3,7 +3,7 @@ jobs:
   pushed_event:
     runs-on: ubuntu-latest
     outputs:
-      continue: true
+      continue: "true"
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-go@v5
@@ -29,9 +29,21 @@ jobs:
     - run: echo foobar > some_file.txt
     - run: cat some_file.txt
 
-  needs_pushed_event:
+  job2:
     needs: pushed_event
+    outputs:
+      workspace_id: ${{ steps.gen-id.outputs.workspace_id }}
     runs-on: ubuntu-latest
     if: ${{ needs.pushed_event.outputs.continue == 'true' }}
     steps:
-      - run: echo "needs_pushed_event was run"
+      - run: echo "job2 was run"
+      - id: gen-id
+        run: echo "workspace_id=123" >> $GITHUB_OUTPUT
+
+  job3:
+    needs: job2
+    runs-on: ubuntu-latest
+    if: ${{ needs.job2.outputs.workspace_id != '' }}
+    steps:
+      - run: echo "job3 was run"
+      - run: echo ${{ needs.job2.outputs.workspace_id }}
