@@ -3,8 +3,16 @@ jobs:
   pushed_event:
     runs-on: ubuntu-latest
     outputs:
-      continue: "false"
+      continue: "true"
     steps:
+    - run: |
+        echo foo
+        # simulate an error
+        echo "STEP_STATUS=failed" >> "${GITHUB_ENV}"
+    - if: ${{ env.STEP_STATUS == 'failed' }}
+      run: echo "step failed ${{ env.STEP_STATUS }}"
+    - if: ${{ env.STEP_STATUS != 'failed' }}
+      run: echo "step wasn't a failure ${{ env.STEP_STATUS }}"
     - uses: actions/checkout@v4
     - uses: actions/setup-go@v5
     - uses: ./.github/actions/debug
