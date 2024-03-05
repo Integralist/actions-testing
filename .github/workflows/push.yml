@@ -24,3 +24,5 @@ jobs:
     - run: touch foo.txt && sudo cp foo.txt /usr/local/bin/foo.txt
     - run: ls /usr/local/bin/
     - run: make bin-viceroy
+    - run: echo foobar > some_file.txt
+    - run: cat some_file.txt
