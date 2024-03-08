@@ -36,6 +36,11 @@ jobs:
     - run: make bin-viceroy
     - run: echo foobar > some_file.txt
     - run: cat some_file.txt
+    - uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: wasm32-wasi # WebAssembly target
+    - run: rustup --version
+    - run: cargo --version
 
   job2:
     needs: pushed_event
