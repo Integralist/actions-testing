@@ -1,8 +1,8 @@
-## Gotchas
+## Gotchas 1
 
 - Use single quotes when using operators like `==` (double quotes are invalid).
 
-## Scheduled Jobs (cron)
+## Scheduled Jobs (cron) 2
 
 ```yaml
 on:
@@ -14,7 +14,7 @@ on:
 
 > **NOTE**: We don't specify a value for `push` key which means run whenever a push is triggered on any branch.
 
-## Automatically cancel in-flight workflows
+## Automatically cancel in-flight workflows 3
 
 The `concurrency` setting allows you to restrict a workflow to one 'group' at a time.
 
