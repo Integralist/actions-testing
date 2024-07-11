@@ -5,6 +5,10 @@ jobs:
     outputs:
       continue: "true"
     steps:
+      # validate escaping env var so it's LITERALLY sent as `${SOME_ENVVAR}`.
+      # This is so the application handling the request will replace that with an env var value.
+    - run: echo curl -LsD - "https://www.example.com/data?location=https://\${SOME_ENVVAR}@data.example.com/example.zip"
+
     - run: |
         echo foo
         # simulate an error
