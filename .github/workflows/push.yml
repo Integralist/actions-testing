@@ -5,6 +5,10 @@ jobs:
     outputs:
       continue: "true"
     steps:
+    - name: is diff installed
+      run: diff --version
+    - name: list software
+      run: ls /usr/bin
       # validate escaping env var so it's LITERALLY sent as `${SOME_ENVVAR}`.
       # This is so the application handling the request will replace that with an env var value.
 
