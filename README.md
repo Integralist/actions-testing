@@ -199,4 +199,64 @@ In the following example the `bar` job will not run if the required fields `foo`
       - run: echo 'yay! this job ran as the bar job was successful'
 ```
 
-...
+## Committing changes directly or opening a PR
+
+```yaml
+name: Update Zone Data
+
+on:
+  # Schedule to run at 9am UTC every day (2pm PST)
+  schedule:
+    - cron: '0 09 * * *'
+
+  # Allow manual trigger via GitHub UI
+  workflow_dispatch:
+
+jobs:
+  update-deps-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: 'go.mod'
+
+    - name: Set up private Go modules
+      run: |
+        echo "Setting up GOPRIVATE and GitHub token"
+        echo "machine github.com login ${{ secrets.GH_PAT_CI }}" > ~/.netrc
+      env:
+        GOPRIVATE: "github.com/fastly"
+
+    - name: Update Zone Data
+      run: make partner-zones
+
+    # - name: Commit changes
+    #   if: success()
+    #   run: |
+    #     git config --global user.name "github-actions[bot]"
+    #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+    #     git add .
+    #     git commit -m "build: update dependencies [skip ci]"
+    #     git push
+
+    - name: Create pull request
+      uses: peter-evans/create-pull-request@v7
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "feat(partnerzones): updates"
+        committer: GitHub <noreply@github.com>
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        title: "feat(partnerzones): updates"
+        body: "My PR description."
+        assignees: Integralist
+
+    - name: Slack ping if failure
+      if: failure()
+      run: |
+        curl -Ss -X POST -H 'Content-type: application/json' --data '{"text":"❌ Example API app dependencies update failed"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+```
