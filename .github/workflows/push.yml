@@ -11,6 +11,22 @@ jobs:
       run: man diff
     - name: list software
       run: ls /usr/bin
+      
+    - name: Check out repository
+      uses: actions/checkout@v4
+    - name: Modify some file
+      run: echo update-$(date -u +"%s") >> testing.txt
+    - name: Create pull request
+      uses: peter-evans/create-pull-request@v7
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "feat(partnerzones): updates"
+        committer: GitHub <noreply@github.com>
+        author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        title: "feat(partnerzones): updates"
+        body: "> [!IMPORTANT]\n> Identify which `resources/...` files should be updated and push commits to this PR before merging."
+        assignees: Integralist
+      
       # validate escaping env var so it's LITERALLY sent as `${SOME_ENVVAR}`.
       # This is so the application handling the request will replace that with an env var value.
 
