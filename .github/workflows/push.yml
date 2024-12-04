@@ -5,6 +5,17 @@ jobs:
     outputs:
       continue: "true"
     steps:
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "feat(partnerzones): updates"
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          title: "feat(partnerzones): updates"
+          body: "> [!IMPORTANT]\n> Identify which `resources/...` files should be updated and push commits to this PR before merging."
+          assignees: Integralist
+
     - name: diff version installed
       run: diff --version
     - name: diff manual
