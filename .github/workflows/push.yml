@@ -5,6 +5,8 @@ jobs:
     outputs:
       continue: "true"
     steps:
+    - name: check environment variables
+      run: env | sort
     - name: diff version installed
       run: diff --version
     - name: diff manual
