@@ -1,42 +1,112 @@
+# This workflow automatically manages PR labeling for documentation and changelog requirements
+# It runs when PRs are opened, reopened, or updated with new commits (synchronize)
+# This ensures labels stay accurate throughout a PR's lifecycle
 name: auto-label pull request
-on: pull_request
 
+# Define the triggering events for maximum coverage of the PR lifecycle
+# - opened: Triggers when PR is first created
+# - reopened: Triggers when closed PR is reopened
+# - synchronize: Triggers when new commits are pushed to PR
+on:
+ pull_request:
+   types: [opened, reopened, synchronize]
+
+# Set the minimal required permissions for security best practices
+# - pull-requests: Required for adding labels to PRs
+# - issues: Required because PR labels use the issues API
 permissions:
   pull-requests: write
   issues: write
   repository-projects: write
 
 jobs:
-  dependabot:
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == 'Integralist/actions-testing'
-    steps:
-      - name: Checkout code with full history
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # fetch full history for all branches
+ # This is the primary job that handles documentation review labeling
+ # It ensures all PRs get proper documentation review tracking
+ # The job skips Dependabot PRs and only runs on this repository
+ needs-docs-review:
+   runs-on: ubuntu-latest
+   if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == '${{ vars.REPOSITORY_NAME }}'
+   steps:
+     # Add the documentation review label with comprehensive error handling
+     # Uses a GitHub's actions toolkit (called core) for error management
+     # Provides detailed error messages if labeling fails
+     - name: Add "needs DOCS review" label
+       uses: actions/github-script@v6
+       with:
+         script: |
+           const core = require('@actions/core');
+           try {
+             await github.rest.issues.addLabels({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               issue_number: context.issue.number,
+               labels: ['needs DOCS review']
+             });
+           } catch (error) {
+             core.setFailed(`Failed to add label: ${error.message}`);
+           }
 
-      - name: Fetch main branch
-        run: git fetch origin main
+ # This is the secondary job that manages changelog requirement labeling
+ # It uses GitHub's path filtering to determine if changelog updates are needed
+ # It automatically adds a skip label when no changelog files are modified
+ skip-changelog:
+   runs-on: ubuntu-latest
+   if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == '${{ vars.REPOSITORY_NAME }}'
+   paths-ignore:
+     - 'CHANGELOG.md'
+     - 'collections/_changelog/**'
+     - 'collections/_changelog_significant/**'
+   steps:
+     # Add skip changelog label when no changelog-related files are modified
+     # Uses same error handling pattern as docs review for consistency
+     # Helps reviewers quickly identify PRs not requiring changelog updates
+     - name: Add "skip the changelog" label
+       uses: actions/github-script@v6
+       with:
+         script: |
+           const core = require('@actions/core');
+           try {
+             await github.rest.issues.addLabels({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               issue_number: context.issue.number,
+               labels: ['skip the changelog']
+             });
+           } catch (error) {
+             core.setFailed(`Failed to add label: ${error.message}`);
+           }
 
-      - name: Add "needs DOCS review" label
-        run: gh pr edit "$PR_URL" --add-label "needs DOCS review"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Check for changes in ./go-project
-        id: check_changes
-        run: |
-          if git diff --name-only origin/main...HEAD | grep -q '^go-project/'; then
-            echo "changes_detected=true" >> $GITHUB_ENV
-          else
-            echo "changes_detected=false" >> $GITHUB_ENV
-          fi
-
-      - name: Add "skip the changelog" label if go-project has changes
-        if: env.changes_detected == 'true'
-        run: gh pr edit "$PR_URL" --add-label "skip the changelog"
-        env:
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#jobs:
+#  dependabot:
+#    runs-on: ubuntu-latest
+#    if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == 'Integralist/actions-testing'
+#    steps:
+#      - name: Checkout code with full history
+#        uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0 # fetch full history for all branches
+#
+#      - name: Fetch main branch
+#        run: git fetch origin main
+#
+#      - name: Add "needs DOCS review" label
+#        run: gh pr edit "$PR_URL" --add-label "needs DOCS review"
+#        env:
+#          PR_URL: ${{ github.event.pull_request.html_url }}
+#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Check for changes in ./go-project
+#        id: check_changes
+#        run: |
+#          if git diff --name-only origin/main...HEAD | grep -q '^go-project/'; then
+#            echo "changes_detected=true" >> $GITHUB_ENV
+#          else
+#            echo "changes_detected=false" >> $GITHUB_ENV
+#          fi
+#
+#      - name: Add "skip the changelog" label if go-project has changes
+#        if: env.changes_detected == 'true'
+#        run: gh pr edit "$PR_URL" --add-label "skip the changelog"
+#        env:
+#          PR_URL: ${{ github.event.pull_request.html_url }}
+#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
