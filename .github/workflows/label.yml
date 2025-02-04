@@ -14,4 +14,5 @@ jobs:
       - name: Add a label
         run: gh pr edit "$PR_URL" --add-label "needs DOCS review"
         env:
+          GH_TOKEN: ${{ github.token }}
           PR_URL: ${{github.event.pull_request.html_url}}
