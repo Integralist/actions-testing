@@ -11,14 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == 'Integralist/actions-testing'
     steps:
-      - name: Checkout code
+      - name: Checkout code with full history
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetch full history for all branches
+
+      - name: Fetch main branch
+        run: git fetch origin main
 
       - name: Add "needs DOCS review" label
         run: gh pr edit "$PR_URL" --add-label "needs DOCS review"
         env:
-          GH_TOKEN: ${{ github.token }}
           PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check for changes in ./go-project
         id: check_changes
