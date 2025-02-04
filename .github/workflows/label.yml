@@ -1,0 +1,17 @@
+name: auto-label pull request
+on: pull_request
+
+permissions:
+  pull-requests: write
+  issues: write
+  repository-projects: write
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == 'Integralist/actions-testing'
+    steps:
+      - name: Add a label
+        run: gh pr edit "$PR_URL" --add-label "needs DOCS review"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
