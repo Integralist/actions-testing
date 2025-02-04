@@ -1,0 +1,10 @@
+# on:
+#   push:
+#     paths: # IMPORTANT: don't use relative paths!
+#       - 'compute-project/**'
+#       - 'go-project/**'
+# jobs:
+#   pushed_event:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo "we ran"
