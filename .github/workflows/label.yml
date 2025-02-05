@@ -8,8 +8,8 @@ name: auto-label pull request
 # - reopened: Triggers when closed PR is reopened
 # - synchronize: Triggers when new commits are pushed to PR
 on:
- pull_request:
-   types: [opened, reopened, synchronize]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 # Set the minimal required permissions for security best practices
 # - pull-requests: Required for adding labels to PRs
@@ -17,64 +17,120 @@ on:
 permissions:
   pull-requests: write
   issues: write
-  repository-projects: write
 
 jobs:
- # This is the primary job that handles documentation review labeling
- # It ensures all PRs get proper documentation review tracking
- # The job skips Dependabot PRs and only runs on this repository
- needs-docs-review:
-   runs-on: ubuntu-latest
-   if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == '${{ vars.REPOSITORY_NAME }}'
-   steps:
-     # Add the documentation review label with comprehensive error handling
-     # Uses a GitHub's actions toolkit (called core) for error management
-     # Provides detailed error messages if labeling fails
-     - name: Add "needs DOCS review" label
-       uses: actions/github-script@v6
-       with:
-         script: |
-           const core = require('@actions/core');
-           try {
-             await github.rest.issues.addLabels({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               issue_number: context.issue.number,
-               labels: ['needs DOCS review']
-             });
-           } catch (error) {
-             core.setFailed(`Failed to add label: ${error.message}`);
-           }
+  # This is the primary job that handles documentation review labeling
+  # It ensures all PRs get proper documentation review tracking
+  # The job skips Dependabot PRs and only runs on this repository
+  needs-docs-review:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == '${{ vars.REPOSITORY_NAME }}'
+    steps:
+      # Add the documentation review label with comprehensive error handling
+      # Uses a GitHub's actions toolkit (called core) for error management
+      # Provides detailed error messages if labeling fails
+      - name: Add "needs DOCS review" label
+        uses: actions/github-script@v6
+        with:
+          script: |
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: ['needs DOCS review']
+              });
+            } catch (error) {
+              core.setFailed(`Failed to add label: ${error.message}`);
+            }
 
- # This is the secondary job that manages changelog requirement labeling
- # It uses GitHub's path filtering to determine if changelog updates are needed
- # It automatically adds a skip label when no changelog files are modified
- skip-changelog:
-   runs-on: ubuntu-latest
-   if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == '${{ vars.REPOSITORY_NAME }}'
-   paths-ignore:
-     - 'CHANGELOG.md'
-     - 'collections/_changelog/**'
-     - 'collections/_changelog_significant/**'
-   steps:
-     # Add skip changelog label when no changelog-related files are modified
-     # Uses same error handling pattern as docs review for consistency
-     # Helps reviewers quickly identify PRs not requiring changelog updates
-     - name: Add "skip the changelog" label
-       uses: actions/github-script@v6
-       with:
-         script: |
-           const core = require('@actions/core');
-           try {
-             await github.rest.issues.addLabels({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               issue_number: context.issue.number,
-               labels: ['skip the changelog']
-             });
-           } catch (error) {
-             core.setFailed(`Failed to add label: ${error.message}`);
-           }
+  # This is the secondary job that manages changelog requirement labeling
+  # It uses GitHub's path filtering to determine if changelog updates are needed
+  # It automatically manages the skip label based on changelog file modifications
+  skip-changelog:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login != 'dependabot[bot]' && github.repository == '${{ vars.REPOSITORY_NAME }}'
+    steps:
+      # Manage skip changelog label based on file modifications
+      # Uses same error handling pattern as docs review for consistency
+      # Helps reviewers quickly identify PRs not requiring changelog updates
+      # Removes skip label when changelog files are modified
+      - name: Manage "skip the changelog" label
+        uses: actions/github-script@v6
+        with:
+          script: |
+            try {
+              console.log('Checking for changelog file modifications...');
+
+              // Get list of changed files in PR
+              const files = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number
+              });
+
+              // Define paths that indicate changelog changes
+              const changelogPaths = [
+                'CHANGELOG.md',
+                'collections/_changelog/',
+                'collections/_changelog_significant/'
+              ];
+
+              // Check if any changed files match changelog paths
+              const hasChangelogChanges = files.data.some(file =>
+                changelogPaths.some(path => file.filename.startsWith(path))
+              );
+
+              // Log the files being checked
+              console.log('Modified files:', files.data.map(f => f.filename).join(', '));
+
+              // Get current labels to determine if skip label exists
+              // This prevents unnecessary API calls for adding/removing labels
+              const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number
+              });
+
+              const hasSkipLabel = currentLabels.some(label => label.name === 'skip the changelog');
+
+              // Add skip label if no changelog files were changed and label doesn't exist
+              // This prevents duplicate label additions
+              if (!hasChangelogChanges && !hasSkipLabel) {
+                console.log('No changelog files modified, adding skip label');
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: ['skip the changelog']
+                });
+                console.log('Successfully added skip the changelog label');
+              } else if (hasChangelogChanges && hasSkipLabel) {
+                // Remove skip label if changelog files were changed and label exists
+                // This ensures the label accurately reflects the PR's current state
+                console.log('Changelog files found, removing skip label');
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: 'skip the changelog'
+                });
+                console.log('Successfully removed skip the changelog label');
+              }
+
+              // Check rate limit status to avoid hitting GitHub API limits
+              // Provides early warning if rate limit is getting low
+              const { data: rateLimit } = await github.rest.rateLimit.get();
+              if (rateLimit.remaining < 100) {
+                console.log('Warning: Rate limit is getting low:', rateLimit);
+              } else {
+                console.log('Current rate limit status:', rateLimit);
+              }
+
+            } catch (error) {
+              console.log('Failed during changelog check or label management');
+              core.setFailed(`Failed to process files or manage label: ${error.message}`);
+            }
 
 #jobs:
 #  dependabot:
