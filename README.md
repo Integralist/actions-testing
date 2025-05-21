@@ -204,6 +204,11 @@ In the following example the `bar` job will not run if the required fields `foo`
 ```yaml
 name: Update Zone Data
 
+permissions:
+  contents: write
+  pull-requests: read
+  id-token: write
+
 on:
   # Schedule to run at 9am UTC every day (2pm PST)
   schedule:
@@ -212,8 +217,11 @@ on:
   # Allow manual trigger via GitHub UI
   workflow_dispatch:
 
+env:
+  GOPRIVATE: "github.com/fastly"
+
 jobs:
-  update-deps-and-test:
+  update-dependencies:
     runs-on: ubuntu-latest
 
     steps:
@@ -227,13 +235,10 @@ jobs:
 
     - name: Set up private Go modules
       run: |
-        echo "Setting up GOPRIVATE and GitHub token"
         echo "machine github.com login ${{ secrets.GH_PAT_CI }}" > ~/.netrc
-      env:
-        GOPRIVATE: "github.com/fastly"
 
-    - name: Update Zone Data
-      run: make partner-zones
+    - name: Update Dependencies
+      run: make update-dependencies
 
     # - name: Commit changes
     #   if: success()
@@ -241,8 +246,7 @@ jobs:
     #     git config --global user.name "github-actions[bot]"
     #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
     #     git add .
-    #     git commit -m "build: update dependencies [skip ci]"
-    #     git push
+    #     git diff-index --quiet HEAD -- || git commit -m "build: update api dependencies [skip ci]" && git push
 
     - name: Create pull request
       uses: peter-evans/create-pull-request@v7
